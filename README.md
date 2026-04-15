@@ -1,4 +1,4 @@
-# 🍳 Prep Mate
+# 👨🏽‍🍳 Prep Mate
 
 An AI-powered web application that generates complete grocery lists based on the dishes you want to cook. Built with **Python**, **Flask**, and **Groq (Llama 3.3)** for ultra-fast AI responses.
 
