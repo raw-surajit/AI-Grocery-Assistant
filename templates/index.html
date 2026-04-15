@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Grocery Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        body {
+            /* This handles the background image and overlay */
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url("{{ url_for('static', filename='images/bg-grocery.avif') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Optional: Smooth scrollbar for your list */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #4b5563;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body class="text-white flex items-center justify-center h-screen overflow-hidden">
+    
+    <div class="bg-black/40 backdrop-blur-xl p-8 rounded-2xl w-full max-w-lg shadow-2xl border border-white/20 max-h-[90vh] overflow-y-auto">
+        <h1 class="text-2xl font-bold mb-4 text-center">
+            🛒 AI Grocery Assistant
+        </h1>
+
+        <input
+            id="query"
+            type="text"
+            placeholder="e.g. I want to cook biryani... "
+            class="w-full p-3 rounded-lg bg-gray-700 outline-none mb-4"
+        >
+
+        <button onclick="getGrocery()" class="w-full bg-[#d97706] hover:bg-[#b45309] p-3 rounded-lg font-bold transition-all shadow-lg">
+               Generate Grocery List
+        </button>
+
+        <ul id="result" class="mt-6 space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar"></ul>
+    </div>
+
+    <script>
+        async function getGrocery() {
+            let query = document.getElementById("query").value;
+            if (!query) return; // Don't send empty requests
+
+            let response = await fetch("/get-grocery", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ query })
+            });
+
+            let data = await response.json();
+            let resultBox = document.getElementById("result");
+            resultBox.innerHTML = "";
+
+            data.forEach(item => {
+                let li = document.createElement("li");
+                li.className = "bg-gray-700 p-2 rounded animate-fade-in";
+                li.innerText = item;
+                resultBox.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
